@@ -1,0 +1,7 @@
+name: "Vault integration"
+runs:
+    using: "composite"
+    steps:
+        - name: Getting vault keys
+          shell: bash
+          run: echo vault action script was called

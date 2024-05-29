@@ -1,0 +1,15 @@
+on:
+  workflow_call:
+    inputs:
+      stack:
+        type: string
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/action-vault
+      - name: "Deploy job test"
+        run: echo "Deploying ${{inputs.stack}}"

@@ -1,0 +1,37 @@
+name: Example of github rules
+on:
+  push:
+    branches:
+        - "!master"
+        - "!development"
+  workflow_dispatch:
+
+jobs:
+    validate:
+        uses: user_name/remote_repo/.github/workflows/linter.yml@main
+        with:
+            docker-dir: "Dockerfile"
+    
+    build:
+        needs: validate
+        runs-on: ubuntu-latest
+        steps:
+          - name: Check out code
+            uses: actions/checkout@v4
+          - name: Install dependencies
+            run: npm i
+          - name: Building the project
+            run: npm run build
+    
+    test:
+        needs: build
+        uses: user_name/remote_repo/.github/workflows/test.yml@main
+        if: github.ref == 'refs/heads/development' || github.ref == 'refs/heads/master'
+        with:
+            cmd-test: "npm test"
+    
+    deploy:
+        needs: test
+        uses: ./.github/workflows/deploy.yml
+        with:
+            stack: "dev-stack"

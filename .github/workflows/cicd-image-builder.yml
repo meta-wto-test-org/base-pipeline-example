@@ -1,0 +1,36 @@
+name: CICD workflow to build docker image
+
+on:
+    push:
+        branches:
+            - "!master"
+        paths:
+            - '.github/registry/**'
+            
+jobs:
+    calculate-version:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Calculing version
+              run: echo Calculating version
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Building
+              run: echo "Building image"
+            - name: Deploying
+              run: echo deploying
+        needs: 
+            - calculate-version
+    update-and-commit:
+        runs-on: ubuntu-latest
+        steps:
+            - name: "Update"
+              run: echo Updating
+            - name: "Commiting"
+              run: echo Commiting
+        needs: 
+            - calculate-version
+            - build-and-deploy
+    
+              
